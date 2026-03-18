@@ -17,9 +17,14 @@
   class _FlagQuizState extends State<FlagQuiz> {
     int score = 0;
     int questionNumber = 1;
-    var countryList = ['France','Egypt','Aus','Japan'];
-    var answer = "France";
+    var countryList = ['france','japan','thailand','solomon'];
+    var answer = "";
     List <Map<String,String>> questions =[];
+    @override
+    void initState(){
+    super.initState();
+    countryList.shuffle();
+}
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -33,16 +38,14 @@
                 Text("Question : $questionNumber"),
                 const SizedBox(height:20),
                 Text("What Flag is this?"),
-                for (var i in assets) questions[images]=i
-                // const SizedBox(height:20),
-                // Image.asset('assets/france.png',height: 120),
-                // const SizedBox(height:20),
-                // for (var i in countryList)
-                //   buildOption(i,answer),
+                Image.asset("assets/${countryList[questionNumber-1]}.png"),
+                for(var i in countryList)
+                buildOption(i, countryList[questionNumber-1]),
+                SizedBox(height: 20),
                 
-                
-
-                Text("Current Score : $score")
+   
+                Text("Current Score : $score"),
+                reset()
               ]
             ),
           ),
@@ -57,7 +60,12 @@
       if(countryName == answer){
         setState((){
           score++;
+          if (questionNumber < countryList.length){
           questionNumber++;
+          }
+          else if(questionNumber == countryList.length){
+            questionNumber = 1;
+          }
         });
         
         }else {
@@ -69,6 +77,24 @@
       child: Text(countryName),
     )
     );
+  }
+  Widget reset(){
+    return SizedBox(
+      width: 200,
+      height:50,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+        onPressed: (){
+          setState(() {
+            questionNumber=1;
+            score =0;
+            countryList.shuffle();
+          });
+        },
+        child: Text("Reset"),
+      ),
+    );
+  
   }
   }
   
