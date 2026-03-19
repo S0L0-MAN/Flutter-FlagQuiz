@@ -19,6 +19,7 @@
     int questionNumber = 1;
     List countryList = ['france','japan','thailand','solomon','india'];
     var correctAnswer = "";
+    
     @override
     void initState(){
     super.initState();
@@ -123,18 +124,103 @@
     return Padding(padding: EdgeInsets.all(2),
     child:ElevatedButton(
       style:ElevatedButton.styleFrom(backgroundColor: Colors.green , foregroundColor: Colors.white),
-      onPressed: (){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("score : $score"))
-        );
+      onPressed: ()async{
+        
+        await Navigator.push(context, 
+        MaterialPageRoute(
+          builder:(context) =>  SecondPage(finalscore:score),
+        ));
         setState(() {
           score = 0;
         });
-        
+       
       },
       child: Text("Finished"),
     )
     );
   }
+  
   }
+
+
+class SecondPage extends StatelessWidget {
+  final int finalscore;
+
+  const SecondPage({super.key, required this.finalscore});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // Using a Container with a Gradient for a modern "App" look
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blueAccent, Colors.indigo],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.emoji_events, // Trophy icon
+              size: 100,
+              color: Colors.amber,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "QUIZ FINISHED",
+              style: TextStyle(
+                fontSize: 18,
+                letterSpacing: 2,
+                color: Colors.white70,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Beautified Score Text
+            Text(
+              "$finalscore",
+              style: const TextStyle(
+                fontSize: 80,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                fontFamily: 'Georgia', // Using a Serif font for contrast
+                shadows: [
+                  Shadow(
+                    blurRadius: 10.0,
+                    color: Colors.black26,
+                    offset: Offset(2, 2),
+                  ),
+                ],
+              ),
+            ),
+            const Text(
+              "TOTAL POINTS",
+              style: TextStyle(color: Colors.white54, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 60),
+            // Beautified Home Button with Icon
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.home_rounded), // The Home Logo
+              label: const Text("PLAY AGAIN"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.indigo,
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                elevation: 10,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
   
